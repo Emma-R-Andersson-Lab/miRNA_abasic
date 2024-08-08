@@ -1,0 +1,9 @@
+# PYC files
+*pyc
+
+# Jupyter files
+scripts/.ipynb_checkpoints
+
+# PDF and PS files
+*pdf
+*ps
