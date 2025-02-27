@@ -7,8 +7,9 @@ Predict structures of target-miR complexes with RNAsubopt.
 '''
 
 
+import sys
 import argparse
-from subprocess import run, PIPE
+from subprocess import run, PIPE, CalledProcessError
 
 import pandas as pd
 from Bio import SeqIO
@@ -88,8 +89,12 @@ def _run_rnasubopt(seq, delta, constraint):
             '--constraint', '--enforceConstraint']
     input_seq = seq+'\n'+constraint
 
-    rnasubopt = run(args, input=input_seq, stdout=PIPE, stderr=PIPE,
-                    text=True, check=True)
+    try:
+        rnasubopt = run(args, input=input_seq, stdout=PIPE,# stderr=PIPE,
+                        text=True, check=True)
+    except CalledProcessError:
+        print(input_seq)
+        sys.exit(1)
     ensemble = []
     for record in rnasubopt.stdout.splitlines()[1:]:
         record = record.split()
